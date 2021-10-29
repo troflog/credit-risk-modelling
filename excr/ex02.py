@@ -1,5 +1,5 @@
 import numpy as np
-import importlib 
+import importlib
 import time
 import matplotlib.pyplot as plt
 import pylab
@@ -10,7 +10,7 @@ import seaborn as sns
 sns.set()
 '''
 BRIEF DESCRIPTION:
-This is an example file associated with the code library for Chapter 2. In 
+This is an example file associated with the code library for Chapter 2. In
 this example, we use the functions in binomialPoissonModels.py to simulate
 the binomial and Poisson independent-default models, print the results and
 graph the tail probabilities.
@@ -31,10 +31,10 @@ importlib.reload(util)
 importlib.reload(bp)
 plt.close('all')
 # Key inputs and parameters
-c = np.load(expFile)  
+c = np.load(expFile)
 p = np.load(dpFile)
 N = len(c)
-myRho = 0.05  
+myRho = 0.05
 portfolioSize = np.sum(c)
 myC = portfolioSize/N
 M = 1000000
@@ -49,11 +49,11 @@ var = np.zeros([len(alpha),numberOfModels])
 es = np.zeros([len(alpha),numberOfModels])
 cTime = np.zeros(numberOfModels)
 # Binomial model
-startTime = time.clock() 
+startTime = time.clock()
 el[0],ul[0],var[:,0],es[:,0] = bp.independentBinomialSimulation(N,M,p,c,alpha)
 cTime[0] = (time.clock() - startTime)
 # Poisson model
-startTime = time.clock() 
+startTime = time.clock()
 el[1],ul[1],var[:,1],es[:,1] = bp.independentPoissonSimulation(N,M,p,c,alpha)
 cTime[1] = (time.clock() - startTime)
 # =====================
