@@ -16,7 +16,7 @@ import pylab
 pylab.ion()
 pylab.show()
 import scipy
-# Local library
+# Local libraries
 import crelib.cmUtilities as util
 import crelib.binomialPoissonModels as bp
 import crelib.mixtureModels as mix
@@ -28,16 +28,13 @@ importlib.reload(mix)
 importlib.reload(th)
 importlib.reload(ac)
 sns.set()
-# These are the exposure and default-probability files
-dpFile = './crelib/defaultProbabilties.npy'
-expFile = './crelib/exposures.npy'
 
 plt.close('all')
 
 
 # Key inputs and parameters
-c = np.load(expFile)
-p = np.load(dpFile)
+c = np.load('crelib/defaultProbabilties.npy')
+p = np.load('crelib/exposures.npy')
 N = len(c)
 portfolioSize = np.sum(c)
 myC = portfolioSize/N
