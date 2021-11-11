@@ -15,7 +15,8 @@ import seaborn as sns
 import pylab
 pylab.ion()
 pylab.show()
-import scipy
+from scipy.optimize import minimize
+from scipy.optimize import fsolve
 # Local libraries
 import crelib.cmUtilities as util
 import crelib.binomialPoissonModels as bp
@@ -29,8 +30,7 @@ importlib.reload(th)
 importlib.reload(ac)
 sns.set()
 
-plt.close('all')
-
+x = optimize
 
 # Key inputs and parameters
 c = np.load('crelib/defaultProbabilties.npy')
@@ -41,20 +41,14 @@ myC = portfolioSize/N
 myP = np.mean(p)
 M = 1000000
 alpha = np.array([0.95,0.97,0.99,0.995,0.999,0.9997,0.9999])
-startRho = 0.20
-startNu = 12
-rhoTarget = 0.05
-tDependenceTarget = 0.02
-numberOfModels = 3
-# Set aside some memory
-el = np.zeros([numberOfModels])
 ul = np.zeros([numberOfModels])
 var = np.zeros([len(alpha),numberOfModels])
 es = np.zeros([len(alpha),numberOfModels])
 cTime = np.zeros(numberOfModels)
+
 print("Running GAUSSIAN THRESHOLD MODEL")
 # (a) Calibrate
-resultG = scipy.optimize.minimize(th.calibrateGaussian,startRho,args=(myP,rhoTarget))
+resultG = minimize(th.calibrateGaussian,startRho,args=(myP,rhoTarget))
 rhoG = resultG.x
 # (b) Simulate
 startTime = time.time()
@@ -62,7 +56,7 @@ el[0],ul[0],var[:,0],es[:,0] = th.oneFactorGaussianModel(N,M,p,c,rhoG,alpha)
 cTime[0] = (time.time() - startTime)
 print("Running t THRESHOLD MODEL")
 # (a) Calibrate
-tModel = scipy.optimize.fsolve(th.tCalibrate, np.array([startRho,startNu]),
+tModel = fsolve(th.tCalibrate, np.array([startRho,startNu]),
                             args=(myP,rhoTarget,tDependenceTarget))
 rhoT = tModel[0]
 nu = tModel[1]
@@ -93,8 +87,7 @@ print("Loss volatility: %0.1f vs. %0.1f vs. %0.1f" % (ul[0],ul[1],ul[2]))
 print("CPU Time: %0.1f vs. %0.1f vs. %0.1f" % (cTime[0],cTime[1],cTime[2]))
 # =====================
 plt.figure(1) # Plot the independent default simulation results
-# =====================
-plt.plot(var[:,0],alpha,color='red',linestyle='-',label='Gaussian')
+# ===================== plt.plot(var[:,0],alpha,color='red',linestyle='-',label='Gaussian')
 plt.plot(var[:,1],alpha,color='blue',linestyle='--',label=r'$t$')
 plt.plot(var[:,2],alpha,color='green',linestyle='-.',label='Variance-gamma')
 plt.xlabel('USD')
