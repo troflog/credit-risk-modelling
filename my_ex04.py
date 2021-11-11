@@ -41,6 +41,13 @@ myC = portfolioSize/N
 myP = np.mean(p)
 M = 1000000
 alpha = np.array([0.95,0.97,0.99,0.995,0.999,0.9997,0.9999])
+startRho = 0.20
+startNu = 12
+rhoTarget = 0.05
+tDependenceTarget = 0.02
+numberOfModels = 3
+# Set aside some memory
+el = np.zeros([numberOfModels])
 ul = np.zeros([numberOfModels])
 var = np.zeros([len(alpha),numberOfModels])
 es = np.zeros([len(alpha),numberOfModels])
@@ -54,6 +61,7 @@ rhoG = resultG.x
 startTime = time.time()
 el[0],ul[0],var[:,0],es[:,0] = th.oneFactorGaussianModel(N,M,p,c,rhoG,alpha)
 cTime[0] = (time.time() - startTime)
+
 print("Running t THRESHOLD MODEL")
 # (a) Calibrate
 tModel = fsolve(th.tCalibrate, np.array([startRho,startNu]),
